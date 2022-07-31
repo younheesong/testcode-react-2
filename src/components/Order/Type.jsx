@@ -12,7 +12,7 @@ function Type({ orderType }) {
 
   const loadItems = async (orderType) => {
     try {
-      const resp = await axios.get(`http://localhost:5000/${orderType}`);
+      const resp = await axios.get(`http://localhost:5001/${orderType}`);
       setItems(resp.data);
     } catch (e) {
       console.error(e);
@@ -32,7 +32,22 @@ function Type({ orderType }) {
       imagePath={item.imagePath}
     />
   ));
-  return <div>{optionItems}</div>;
+  return (
+    <>
+      <h2>주문 종류</h2>
+      <p>하나의 가격</p>
+      <p>총가격: </p>
+
+      <div
+        style={{
+          display: "flex",
+          flexDirection: orderType === "options" && "columns",
+        }}
+      >
+        {optionItems}
+      </div>
+    </>
+  );
 }
 
 export default Type;

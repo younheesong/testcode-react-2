@@ -1,6 +1,9 @@
-import logo from "./logo.svg";
 import "./App.css";
-
+import Order from "./pages/Order";
 export default function App() {
-  return <h1 className="text-3xl font-bold underline">Hello world!</h1>;
+  return (
+    <div style={{ padding: "4rem" }}>
+      <Order />
+    </div>
+  );
 }
