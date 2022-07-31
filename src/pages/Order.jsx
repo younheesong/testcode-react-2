@@ -1,6 +1,9 @@
 import React from "react";
+import { useContext } from "react";
 import Type from "../components/Order/Type";
+import { OrderContext } from "../contexts/OrderContext";
 function Order() {
+  const [orderDatas, updateItemCount] = useContext(OrderContext);
   return (
     <div>
       <h1>travel products</h1>
@@ -12,7 +15,7 @@ function Order() {
           <Type orderType="options" />
         </div>
         <div>
-          <h2>total price</h2>
+          <h2>total price {orderDatas.totals.total}</h2>
           <br />
           <button>주문</button>
         </div>
