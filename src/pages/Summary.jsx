@@ -1,5 +1,5 @@
-import { useState } from "react";
-
+import { useEffect, useState, useContext } from "react";
+import { OrderContext } from "../contexts/OrderContext";
 /* This example requires Tailwind CSS v2.0+ */
 const products = [
   {
@@ -16,8 +16,15 @@ const products = [
   // More products...
 ];
 
-export default function Summary() {
+export default function Summary({ setStep }) {
+  const [orderDatas, updateItemCount] = useContext(OrderContext);
   const [checkOrder, setCheckOrder] = useState(false);
+  const productArray = Array.from(orderDatas.products);
+  const optionArray = Array.from(orderDatas.options);
+
+  useEffect(() => {
+    console.log(orderDatas);
+  }, []);
   return (
     <>
       {/*
@@ -32,9 +39,9 @@ export default function Summary() {
         <div>
           <div className="max-w-2xl mx-auto py-16 px-4 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8 lg:py-32 lg:grid lg:grid-cols-2 lg:gap-x-8 xl:gap-x-24">
             <div className="lg:col-start-2">
-              <p className="mt-2 text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
+              <h1 className="mt-2 text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
                 주문서 확인
-              </p>
+              </h1>
 
               <dl className="mt-16 text-sm font-medium">
                 <dt className="text-gray-900">Tracking number</dt>
@@ -45,46 +52,29 @@ export default function Summary() {
                 role="list"
                 className="mt-6 text-sm font-medium text-gray-500 border-t border-gray-200 divide-y divide-gray-200"
               >
-                {products.map((product) => (
-                  <li key={product.id} className="flex py-6 space-x-6">
-                    <img
-                      src={product.imageSrc}
-                      alt={product.imageAlt}
-                      className="flex-none w-24 h-24 bg-gray-100 rounded-md object-center object-cover"
-                    />
+                {productArray.map((product, i) => (
+                  <li key={i} className="flex py-6 space-x-6">
                     <div className="flex-auto space-y-1">
-                      <h3 className="text-gray-900">
-                        <a href={product.href}>{product.name}</a>
-                      </h3>
-                      <p>{product.color}</p>
-                      <p>{product.size}</p>
+                      <h3 className="text-gray-900">{product[0]}</h3>
                     </div>
                     <p className="flex-none font-medium text-gray-900">
-                      {product.price}
+                      {product[1]}
                     </p>
                   </li>
                 ))}
               </ul>
 
               <dl className="text-sm font-medium text-gray-500 space-y-6 border-t border-gray-200 pt-6">
-                <div className="flex justify-between">
-                  <dt>Subtotal</dt>
-                  <dd className="text-gray-900">$72.00</dd>
-                </div>
-
-                <div className="flex justify-between">
-                  <dt>Shipping</dt>
-                  <dd className="text-gray-900">$8.00</dd>
-                </div>
-
-                <div className="flex justify-between">
-                  <dt>Taxes</dt>
-                  <dd className="text-gray-900">$6.40</dd>
-                </div>
+                {optionArray.map((item, i) => (
+                  <div className="flex justify-between" key={i}>
+                    <dt>{item[0]}</dt>
+                    <dd className="text-gray-900">{item[1]}</dd>
+                  </div>
+                ))}
 
                 <div className="flex items-center justify-between border-t border-gray-200 text-gray-900 pt-6">
                   <dt className="text-base">Total</dt>
-                  <dd className="text-base">$86.40</dd>
+                  <dd className="text-base">{orderDatas.totals.total}</dd>
                 </div>
               </dl>
 
@@ -103,7 +93,11 @@ export default function Summary() {
               </div>
               <div className="mt-16 border-t border-gray-200 py-6 text-right">
                 <div>
-                  <button type="submit" disabled={!checkOrder}>
+                  <button
+                    type="submit"
+                    onClick={() => setStep(2)}
+                    disabled={!checkOrder}
+                  >
                     확인
                   </button>
                 </div>
